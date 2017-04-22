@@ -15,13 +15,11 @@ class Timeout(Exception):
 
 
 """
-     myMoves and opMoves are respectively the amount of possible valid movements
-     from the position of the computer and opponent at any one state.
-     filledSpaces is the number of spaces on the board that are filled.
-     The constant 3 was determined through testing to be the optimal combination in early games.
+    The player moves and the  opponent moves, which are respectively
+    the amount of possible valid movements from the position of
+    the computer and opponent at any state. On this evaluation function
+    we chose 3 times the opponent moves in order to get an aggressive game
 """
-
-
 def heuristic1(game, player):
     if game.is_loser(player):
         return float("-inf")
@@ -36,10 +34,11 @@ def heuristic1(game, player):
     return float((my_moves - 3 * opponent_moves) * filled)
 
 '''
-    Check the distance to the center to get an advantage on position
+    This heuristic function gets advantage from the opponent trying to
+    choose moves that are near to the center of the board. I use the Manhattan
+    distance to get which player has the highest score take it from all his
+    legal movements that aren’t touching the walls,
 '''
-
-
 def heuristic2(game, player):
     if game.is_loser(player):
         return float("-inf")
@@ -73,8 +72,18 @@ def heuristic2(game, player):
     return float(my_moves_score - 2 * opponent_moves_score)
 
 def custom_score(game, player):
-    """Calculate the heuristic value of a game state from the point of view
-    of the given player.
+    """
+
+    This heuristic has 3 functions in order to get the best results
+
+    1. This first stage is when the filled cells percentage on the game is less
+     than 30%; so at that moment the player will play an aggressive game.
+
+    2. Avoid the movements that touch the walls
+
+    3. The final stage involves to generate a dynamic partition and maximize
+     the longest possible movements
+
 
     Note: this function should be called from within a Player instance as
     `self.score()` -- you should not need to call this function directly.
